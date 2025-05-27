@@ -1,0 +1,15 @@
+spec:
+  namespace: deepwiki
+  replicas: 1
+  # Images hosted at https://github.com/AsyncFuncAI/deepwiki-open/pkgs/container/deepwiki-open
+  image: ghcr.io/asyncfuncai/deepwiki-open:sha-ff354c9
+  env:
+    - name: OLLAMA_HOST
+      value: http://your-ollama-server:11434
+  # Ensure persistent volume and persistent volume claim exist
+  storage:
+    pvc: deepwiki-pvc
+  ingress:
+    webUrl: deepwiki.example.com      # NextJS app
+    apiUrl: deepwiki-api.example.com  # Python API
+

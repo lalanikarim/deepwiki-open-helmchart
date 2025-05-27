@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deepwiki-deploy
+  namespace: {{ .Values.spec.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: deepwiki-app # has to match .spec.template.metadata.labels
+  replicas: {{ .Values.spec.replicas | default 1 }} # by default is 1
+  template:
+    metadata:
+      labels:
+        app: deepwiki-app # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: deepwiki
+        image: {{ .Values.spec.image }}
+        env:
+        - name: SERVER_URL
+          value: {{ .Values.spec.ingress.apiUrl }}
+        - name: PORT
+          value: "8001"
+        {{- range .Values.spec.env }}
+        - name: {{ .name }}
+          value: {{ .value | quote }}
+        {{- end }}
+        ports:
+        - containerPort: 3000
+          name: web
+        - containerPort: 8001
+          name: api
+        volumeMounts:
+        - name: deepwiki-volume
+          mountPath: /root/.adalflow
+      volumes:
+        - name: deepwiki-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.spec.storage.pvc }}
