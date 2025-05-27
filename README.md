@@ -11,16 +11,15 @@ This Helm chart is designed to deploy the [DeepWiki-Open](https://github.com/Asy
 ## Installation
 
 1. Add the chart repository (if using a custom repo):
-```
+<pre><code>
 helm repo add mychart https://your-chart-repo.com
-```
+</code></pre>
 
 2. Install the chart with custom values:
 ```
 helm install my-release ./chart --set spec.namespace=your-namespace \
   --set spec.replicas=2 \
-  --set ingress.webUrl=your-web-url \
-  --set ingress.apiUrl=your-api-url
+  --set ingress.url=your-web-url
 ```
 
 ## Configuration
@@ -39,8 +38,7 @@ The following parameters can be customized in `values.yaml`:
 - `storage.pvc`: Persistent Volume Claim name (default: `deepwiki-pvc`)
 
 ### Ingress
-- `ingress.webUrl`: Web application domain (default: `deepwiki.example.com`)
-- `ingress.apiUrl`: API endpoint domain (default: `deepwiki-api.example.com`)
+- `ingress.url`: Combined web and API domain (default: `deepwiki.example.com`)
 
 ## Template Structure
 

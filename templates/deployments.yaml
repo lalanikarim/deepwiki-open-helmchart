@@ -18,7 +18,7 @@ spec:
         image: {{ .Values.spec.image }}
         env:
         - name: SERVER_URL
-          value: {{ .Values.spec.ingress.apiUrl }}
+          value: {{ .Values.spec.ingress.url }}/api/v1
         - name: PORT
           value: "8001"
         {{- range .Values.spec.env }}

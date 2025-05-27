@@ -10,6 +10,4 @@ spec:
   storage:
     pvc: deepwiki-pvc
   ingress:
-    webUrl: deepwiki.example.com      # NextJS app
-    apiUrl: deepwiki-api.example.com  # Python API
-
+    url: deepwiki.example.com      # for NextJS fe app. be will be at /api/v1
