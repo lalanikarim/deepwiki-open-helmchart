@@ -2,13 +2,37 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: deepwiki-ingress
+  name: deepwiki-ingress-backend
   namespace: {{ .Values.spec.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/ssl-forward: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: "20m"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.spec.ingress.url }}
+    http:
+      paths:
+      - path: /api/v1(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: deepwiki-service
+            port:
+              name: api
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: deepwiki-ingress-frontend
+  namespace: {{ .Values.spec.namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-forward: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
   ingressClassName: nginx
   rules:
@@ -22,10 +46,3 @@ spec:
             name: deepwiki-service
             port:
               name: web
-      - path: /api/v1
-        pathType: Prefix
-        backend:
-          service:
-            name: deepwiki-service
-            port:
-              name: api
